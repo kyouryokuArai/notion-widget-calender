@@ -4,12 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>日めくりカレンダー</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   body {
-    font-family: 'Helvetica Neue', 'Hiragino Sans', 'Yu Gothic', sans-serif;
-    background: transparent;
+    font-family: 'Inter', sans-serif;
+    background: #0d0d0d;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -17,103 +18,212 @@
   }
 
   .card {
-    background: #ffffff;
-    border-radius: 16px;
-    padding: 36px 48px 32px;
-    text-align: center;
-    box-shadow: 0 2px 20px rgba(0,0,0,0.07);
-    width: 240px;
+    width: 340px;
+    padding: 40px 36px 36px;
+    background: #141414;
+    border-radius: 20px;
+    border: 1px solid #2a2a2a;
     position: relative;
-    border-top: 6px solid #1a1a1a;
+    overflow: hidden;
   }
 
-  /* 穴のリング */
-  .rings {
+  .card::before {
+    content: '';
     position: absolute;
-    top: -14px;
-    left: 0; right: 0;
-    display: flex;
-    justify-content: center;
-    gap: 40px;
+    top: -60px; right: -60px;
+    width: 180px; height: 180px;
+    background: radial-gradient(circle, rgba(255,255,255,0.04) 0%, transparent 70%);
+    pointer-events: none;
   }
-  .ring {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: #f0f0f0;
-    border: 3px solid #1a1a1a;
+
+  .top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
   }
 
   .month {
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 0.2em;
-    color: #999;
-    text-transform: uppercase;
-    margin-bottom: 4px;
-  }
-
-  .day-number {
-    font-size: 96px;
-    font-weight: 700;
-    color: #1a1a1a;
-    line-height: 1;
-    letter-spacing: -4px;
-    margin: 8px 0 12px;
-  }
-
-  .divider {
-    width: 32px;
-    height: 2px;
-    background: #e0e0e0;
-    margin: 0 auto 12px;
-  }
-
-  .weekday {
-    font-size: 14px;
+    font-size: 11px;
     font-weight: 500;
-    letter-spacing: 0.15em;
+    letter-spacing: 0.25em;
     color: #555;
     text-transform: uppercase;
   }
 
   .year {
     font-size: 11px;
-    color: #bbb;
-    margin-top: 16px;
-    letter-spacing: 0.1em;
+    font-weight: 300;
+    letter-spacing: 0.15em;
+    color: #333;
+  }
+
+  .main-row {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 24px;
+  }
+
+  .day-number {
+    font-family: 'DM Serif Display', serif;
+    font-size: 110px;
+    line-height: 1;
+    color: #f0f0f0;
+    letter-spacing: -4px;
+  }
+
+  .weather-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 8px;
+    gap: 6px;
+    min-width: 70px;
+  }
+
+  .weather-icon {
+    font-size: 36px;
+    line-height: 1;
+  }
+
+  .weather-temp {
+    font-size: 22px;
+    font-weight: 300;
+    color: #e0e0e0;
+    letter-spacing: -0.5px;
+  }
+
+  .weather-temp sup {
+    font-size: 12px;
+    font-weight: 400;
+    color: #666;
+    vertical-align: super;
+  }
+
+  .weather-desc {
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    color: #444;
+    text-transform: uppercase;
+    text-align: center;
+  }
+
+  .bottom-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #f0f0f0;
+    opacity: 0.3;
+    flex-shrink: 0;
+  }
+
+  .weekday {
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    color: #555;
+    text-transform: uppercase;
+  }
+
+  .weekday.sunday  { color: #c0654a; opacity: 0.9; }
+  .weekday.saturday { color: #4a7fc0; opacity: 0.9; }
+
+  .divider-v {
+    width: 1px;
+    height: 40px;
+    background: #2a2a2a;
+    align-self: flex-end;
+    margin-bottom: 8px;
   }
 </style>
 </head>
 <body>
 <div class="card">
-  <div class="rings">
-    <div class="ring"></div>
-    <div class="ring"></div>
+  <div class="top-row">
+    <div class="month" id="month"></div>
+    <div class="year" id="year"></div>
   </div>
-  <div class="month" id="month"></div>
-  <div class="day-number" id="day"></div>
-  <div class="divider"></div>
-  <div class="weekday" id="weekday"></div>
-  <div class="year" id="year"></div>
+  <div class="main-row">
+    <div class="day-number" id="day"></div>
+    <div class="divider-v"></div>
+    <div class="weather-block">
+      <div class="weather-icon" id="w-icon">—</div>
+      <div class="weather-temp" id="w-temp">—<sup>°C</sup></div>
+      <div class="weather-desc" id="w-desc">Loading</div>
+    </div>
+  </div>
+  <div class="bottom-row">
+    <div class="dot" id="dot"></div>
+    <div class="weekday" id="weekday"></div>
+  </div>
 </div>
 
 <script>
-  const months = ["January","February","March","April","May","June",
-                  "July","August","September","October","November","December"];
+  const months   = ["January","February","March","April","May","June",
+                    "July","August","September","October","November","December"];
   const weekdays = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 
-  function update() {
-    const now = new Date();
-    document.getElementById('month').textContent = months[now.getMonth()];
-    document.getElementById('day').textContent = String(now.getDate()).padStart(2, '0');
-    document.getElementById('weekday').textContent = weekdays[now.getDay()];
-    document.getElementById('year').textContent = now.getFullYear();
+  // 甲府の座標
+  const LAT = 35.6635, LON = 138.5684;
+
+  // WMO天気コード → 絵文字＋説明
+  function weatherInfo(code) {
+    if (code === 0)            return { icon: '☀️', desc: 'Clear' };
+    if (code <= 2)             return { icon: '🌤️', desc: 'Partly Cloudy' };
+    if (code === 3)            return { icon: '☁️', desc: 'Cloudy' };
+    if (code <= 49)            return { icon: '🌫️', desc: 'Foggy' };
+    if (code <= 59)            return { icon: '🌦️', desc: 'Drizzle' };
+    if (code <= 69)            return { icon: '🌧️', desc: 'Rain' };
+    if (code <= 79)            return { icon: '❄️', desc: 'Snow' };
+    if (code <= 82)            return { icon: '🌧️', desc: 'Showers' };
+    if (code <= 86)            return { icon: '🌨️', desc: 'Snow Showers' };
+    if (code <= 99)            return { icon: '⛈️', desc: 'Thunderstorm' };
+    return { icon: '🌡️', desc: 'Unknown' };
   }
 
-  update();
-  // 日付が変わったら更新
-  setInterval(update, 60000);
+  function updateDate() {
+    const now = new Date();
+    const dow = now.getDay();
+    document.getElementById('month').textContent = months[now.getMonth()];
+    document.getElementById('year').textContent  = now.getFullYear();
+    document.getElementById('day').textContent   = String(now.getDate()).padStart(2, '0');
+
+    const wdEl = document.getElementById('weekday');
+    wdEl.textContent = weekdays[dow];
+    wdEl.className   = 'weekday' + (dow === 0 ? ' sunday' : dow === 6 ? ' saturday' : '');
+
+    const dot = document.getElementById('dot');
+    dot.style.background = dow === 0 ? '#c0654a' : dow === 6 ? '#4a7fc0' : '#f0f0f0';
+  }
+
+  async function fetchWeather() {
+    try {
+      const url = `https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}&current=temperature_2m,weathercode&timezone=Asia%2FTokyo`;
+      const res  = await fetch(url);
+      const data = await res.json();
+      const temp = Math.round(data.current.temperature_2m);
+      const code = data.current.weathercode;
+      const info = weatherInfo(code);
+
+      document.getElementById('w-icon').textContent = info.icon;
+      document.getElementById('w-temp').innerHTML   = `${temp}<sup>°C</sup>`;
+      document.getElementById('w-desc').textContent = info.desc;
+    } catch(e) {
+      document.getElementById('w-desc').textContent = 'N/A';
+    }
+  }
+
+  updateDate();
+  fetchWeather();
+  setInterval(updateDate, 60000);
+  setInterval(fetchWeather, 600000); // 10分ごとに天気更新
 </script>
 </body>
 </html>
