@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>日めくりカレンダー</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Helvetica Neue', 'Hiragino Sans', 'Yu Gothic', sans-serif;
+    background: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+
+  .card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 36px 48px 32px;
+    text-align: center;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.07);
+    width: 240px;
+    position: relative;
+    border-top: 6px solid #1a1a1a;
+  }
+
+  /* 穴のリング */
+  .rings {
+    position: absolute;
+    top: -14px;
+    left: 0; right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+  }
+  .ring {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #f0f0f0;
+    border: 3px solid #1a1a1a;
+  }
+
+  .month {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    color: #999;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .day-number {
+    font-size: 96px;
+    font-weight: 700;
+    color: #1a1a1a;
+    line-height: 1;
+    letter-spacing: -4px;
+    margin: 8px 0 12px;
+  }
+
+  .divider {
+    width: 32px;
+    height: 2px;
+    background: #e0e0e0;
+    margin: 0 auto 12px;
+  }
+
+  .weekday {
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    color: #555;
+    text-transform: uppercase;
+  }
+
+  .year {
+    font-size: 11px;
+    color: #bbb;
+    margin-top: 16px;
+    letter-spacing: 0.1em;
+  }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="rings">
+    <div class="ring"></div>
+    <div class="ring"></div>
+  </div>
+  <div class="month" id="month"></div>
+  <div class="day-number" id="day"></div>
+  <div class="divider"></div>
+  <div class="weekday" id="weekday"></div>
+  <div class="year" id="year"></div>
+</div>
+
+<script>
+  const months = ["January","February","March","April","May","June",
+                  "July","August","September","October","November","December"];
+  const weekdays = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+
+  function update() {
+    const now = new Date();
+    document.getElementById('month').textContent = months[now.getMonth()];
+    document.getElementById('day').textContent = String(now.getDate()).padStart(2, '0');
+    document.getElementById('weekday').textContent = weekdays[now.getDay()];
+    document.getElementById('year').textContent = now.getFullYear();
+  }
+
+  update();
+  // 日付が変わったら更新
+  setInterval(update, 60000);
+</script>
+</body>
+</html>
