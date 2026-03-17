@@ -6,80 +6,39 @@
 <title>Calendar</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-@font-face {
-  font-family: 'DSEG7';
-  src: url('DSEG7Classic-Regular.woff2') format('woff2');
-  font-weight: normal;
-  font-style: normal;
-}
 * { margin:0; padding:0; box-sizing:border-box; }
 html, body { background:#ffffff; height:100%; }
 body { font-family:'Inter',sans-serif; display:flex; justify-content:center; align-items:center; padding:16px; }
 .card {
   width:100%; padding:36px 48px;
   background:#141414; border-radius:20px; border:1px solid #2a2a2a;
-  display:flex; flex-direction:column; gap:28px;
+  display:flex; flex-direction:column; gap:24px;
   position:relative; overflow:hidden;
 }
 .card::before {
-  content:''; position:absolute; top:-40px; left:50%; transform:translateX(-50%);
-  width:60%; height:200px;
-  background:radial-gradient(ellipse, rgba(57,255,20,0.04) 0%, transparent 70%);
+  content:''; position:absolute; top:-60px; right:-60px;
+  width:220px; height:220px;
+  background:radial-gradient(circle, rgba(57,255,20,0.04) 0%, transparent 70%);
   pointer-events:none;
 }
-.top-row { display:flex; justify-content:space-between; align-items:center; }
-.month { font-size:11px; font-weight:500; letter-spacing:0.3em; color:#555; text-transform:uppercase; }
-.year { font-size:11px; font-weight:300; letter-spacing:0.2em; color:#333; }
-.main-row { display:flex; align-items:center; justify-content:space-between; gap:32px; }
-.day-number { font-family:'DM Serif Display',serif; font-size:120px; line-height:1; color:#f0f0f0; letter-spacing:-6px; flex-shrink:0; }
-.divider-v { width:1px; height:80px; background:#2a2a2a; flex-shrink:0; }
-.clock-block { flex:1; display:flex; align-items:center; justify-content:center; }
-.clock-row { display:flex; align-items:baseline; gap:2px; }
-.dseg { font-family:'DSEG7',monospace; position:relative; display:inline-block; line-height:1; }
-.dseg::before { content:attr(data-val); font-family:'DSEG7',monospace; position:absolute; left:0; top:0; color:rgba(57,255,20,0.08); }
-.dseg span { position:relative; z-index:1; color:#39ff14; text-shadow:0 0 6px rgba(57,255,20,1),0 0 16px rgba(57,255,20,0.6),0 0 32px rgba(57,255,20,0.3); }
-.dseg-lg { font-size:64px; }
-.dseg-sm { font-size:42px; }
-.colon-lg { font-family:'DSEG7',monospace; font-size:64px; line-height:1; color:#39ff14; text-shadow:0 0 6px rgba(57,255,20,1),0 0 16px rgba(57,255,20,0.5); animation:blinkColon 1s step-end infinite; margin:0 2px; align-self:center; padding-bottom:4px; }
-.colon-sm { font-family:'DSEG7',monospace; font-size:42px; line-height:1; color:#39ff14; text-shadow:0 0 6px rgba(57,255,20,1),0 0 16px rgba(57,255,20,0.5); animation:blinkColon 1s step-end infinite; margin:0 2px; align-self:center; padding-bottom:2px; }
-@keyframes blinkColon { 0%,100%{opacity:1} 50%{opacity:0.1} }
-.weather-block { display:flex; flex-direction:column; align-items:center; gap:8px; flex-shrink:0; min-width:90px; }
-.weather-icon { font-size:40px; }
-.weather-temp { font-size:28px; font-weight:300; color:#e0e0e0; }
-.weather-temp sup { font-size:13px; color:#555; vertical-align:super; }
-.weather-desc { font-size:10px; letter-spacing:0.15em; color:#444; text-transform:uppercase; }
-.bottom-row { display:flex; align-items:center; gap:12px; border-top:1px solid #1f1f1f; padding-top:20px; }
-.dot { width:6px; height:6px; border-radius:50%; opacity:0.2; flex-shrink:0; }
-.weekday { font-size:11px; letter-spacing:0.25em; color:#444; text-transform:uppercase; }
-.weekday.sunday { color:#c0654a; opacity:0.9; }
-.weekday.saturday { color:#4a7fc0; opacity:0.9; }
+.top-row { display:flex; flex-direction:column; gap:4px; }
+.year { font-size:10px; font-weight:400; letter-spacing:0.25em; color:#ff66a8; text-transform:uppercase; opacity:0.9; }
+.month { font-size:11px; font-weight:500; letter-spacing:0.3em; color:#ffff00; text-transform:uppercase; text-shadow:0 0 8px rgba(255,255,0,0.7); }
+.day-number { font-family:'DM Serif Display',serif; font-size:140px; line-height:1; color:#f0f0f0; letter-spacing:-8px; }
+.bottom-row { display:flex; align-items:center; gap:12px; border-top:1px solid #888888; padding-top:20px; opacity: 0.8; }
+.dot { width:6px; height:6px; border-radius:50%; background:#39ff14; box-shadow:0 0 6px rgba(57,255,20,0.8); flex-shrink:0; }
+.weekday { font-size:11px; letter-spacing:0.25em; color:#00cfff; text-transform:uppercase; text-shadow:0 0 8px rgba(0,207,255,0.7); }
+.weekday.sunday { color:#ff2020; text-shadow:0 0 8px rgba(255,32,32,0.7); }
+.weekday.saturday { color:#39ff14; text-shadow:0 0 8px rgba(57,255,20,0.7); }
 </style>
 </head>
 <body>
 <div class="card">
   <div class="top-row">
-    <div class="month" id="month"></div>
     <div class="year" id="year"></div>
+    <div class="month" id="month"></div>
   </div>
-  <div class="main-row">
-    <div class="day-number" id="day"></div>
-    <div class="divider-v"></div>
-    <div class="clock-block">
-      <div class="clock-row">
-        <div class="dseg dseg-lg" data-val="88"><span id="c-h">00</span></div>
-        <div class="colon-lg">:</div>
-        <div class="dseg dseg-lg" data-val="88"><span id="c-m">00</span></div>
-        <div class="colon-sm">:</div>
-        <div class="dseg dseg-sm" data-val="88"><span id="c-s">00</span></div>
-      </div>
-    </div>
-    <div class="divider-v"></div>
-    <div class="weather-block">
-      <div class="weather-icon" id="w-icon">-</div>
-      <div class="weather-temp" id="w-temp">-<sup>C</sup></div>
-      <div class="weather-desc" id="w-desc">Loading</div>
-    </div>
-  </div>
+  <div class="day-number" id="day"></div>
   <div class="bottom-row">
     <div class="dot" id="dot"></div>
     <div class="weekday" id="weekday"></div>
@@ -88,54 +47,22 @@ body { font-family:'Inter',sans-serif; display:flex; justify-content:center; ali
 <script>
 var months=["January","February","March","April","May","June","July","August","September","October","November","December"];
 var weekdays=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-var LAT=35.6635,LON=138.5684;
 function pad(n){return String(n).padStart(2,'0');}
-function updateAll(){
+function update(){
   var now=new Date();
   var dow=now.getDay();
   document.getElementById('month').textContent=months[now.getMonth()];
   document.getElementById('year').textContent=now.getFullYear();
   document.getElementById('day').textContent=pad(now.getDate());
-  document.getElementById('c-h').textContent=pad(now.getHours());
-  document.getElementById('c-m').textContent=pad(now.getMinutes());
-  document.getElementById('c-s').textContent=pad(now.getSeconds());
   var wdEl=document.getElementById('weekday');
   wdEl.textContent=weekdays[dow];
   wdEl.className='weekday'+(dow===0?' sunday':dow===6?' saturday':'');
-  document.getElementById('dot').style.background=dow===0?'#c0654a':dow===6?'#4a7fc0':'#f0f0f0';
+  var dot=document.getElementById('dot');
+  dot.style.background=dow===0?'#ff6b6b':dow===6?'#6bb5ff':'#39ff14';
+  dot.style.boxShadow=dow===0?'0 0 6px rgba(255,107,107,0.8)':dow===6?'0 0 6px rgba(107,181,255,0.8)':'0 0 6px rgba(57,255,20,0.8)';
 }
-function weatherInfo(code){
-  if(code===0)return{icon:'sunny',desc:'Clear'};
-  if(code<=2)return{icon:'partly',desc:'Partly Cloudy'};
-  if(code===3)return{icon:'cloudy',desc:'Cloudy'};
-  if(code<=49)return{icon:'fog',desc:'Foggy'};
-  if(code<=59)return{icon:'drizzle',desc:'Drizzle'};
-  if(code<=69)return{icon:'rain',desc:'Rain'};
-  if(code<=79)return{icon:'snow',desc:'Snow'};
-  if(code<=82)return{icon:'shower',desc:'Showers'};
-  if(code<=86)return{icon:'snowshower',desc:'Snow Showers'};
-  if(code<=99)return{icon:'thunder',desc:'Thunderstorm'};
-  return{icon:'unknown',desc:'Unknown'};
-}
-var icons={'sunny':'☀️','partly':'🌤️','cloudy':'☁️','fog':'🌫️','drizzle':'🌦️','rain':'🌧️','snow':'❄️','shower':'🌧️','snowshower':'🌨️','thunder':'⛈️','unknown':'🌡️'};
-async function fetchWeather(){
-  try{
-    var url='https://api.open-meteo.com/v1/forecast?latitude='+LAT+'&longitude='+LON+'&current=temperature_2m,weathercode&timezone=Asia%2FTokyo';
-    var res=await fetch(url);
-    var data=await res.json();
-    var temp=Math.round(data.current.temperature_2m);
-    var info=weatherInfo(data.current.weathercode);
-    document.getElementById('w-icon').textContent=icons[info.icon];
-    document.getElementById('w-temp').innerHTML=temp+'<sup>C</sup>';
-    document.getElementById('w-desc').textContent=info.desc;
-  }catch(e){
-    document.getElementById('w-desc').textContent='N/A';
-  }
-}
-updateAll();
-fetchWeather();
-setInterval(updateAll,1000);
-setInterval(fetchWeather,600000);
+update();
+setInterval(update,60000);
 </script>
 </body>
 </html>
